@@ -106,14 +106,6 @@ const Home = ({ navigation }) => {
           >
             Action
           </Text>
-          {/* <View style={{
-                            height:4,
-                            backgroundColor:"#b1e5d3",
-                            width:115,
-                            //marginTop:-5
-                        }}>
-
-                        </View> */}
         </View>
         <View style={{ width: "50%", alignItems: "flex-end" }}>
           <View
@@ -128,10 +120,10 @@ const Home = ({ navigation }) => {
               style={{
                 fontWeight: "bold",
                 fontSize: 13,
-                color: "#FFF",
+                color: "#FFF", //F30 => off
               }}
             >
-              Auto Mode: On
+              Light: On
             </Text>
           </View>
         </View>
@@ -158,7 +150,7 @@ const Home = ({ navigation }) => {
           style={{
             height: 250,
             elevation: 2,
-            backgroundColor: "#FFF",
+            backgroundColor: "#F30", //red => manual off
             marginLeft: 20,
             marginTop: 20,
             borderRadius: 15,
@@ -166,43 +158,37 @@ const Home = ({ navigation }) => {
             width: 160,
           }}
         >
-          <Image source={require("../images/4.png")} />
-          {/* style={{ width: "50%", alignItems: "flex-end", marginTop: 40 }} */}
+          <Image
+            source={require("../images/4.png")}
+            style={{
+              flex: 1,
+              width: null,
+              height: null,
+              resizeMode: "contain",
+            }}
+          />
+
           <View
             style={{
               flexDirection: "row",
-              paddingTop: 20,
+              //paddingTop: 20,
               paddingHorizontal: 10,
             }}
           >
             <Text
               style={{
                 fontWeight: "bold",
-                marginRight: 50,
+                fontSize: 25,
+                textAlign: "center",
+                flex: 1,
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               MANUAL
             </Text>
-            <Icon
-              name="user-check"
-              type="feather"
-              color="#517fa4"
-              style={{ alignItems: "flex-end" }}
-            />
-            {/* <Text style={{
-                                fontWeight:"bold",
-                                color:"#00a46c",
-                                paddingLeft:45
-                            }}>$400</Text> */}
           </View>
-          {/* <Text style={{
-                            paddingHorizontal:10,
-                            fontWeight:"bold",
-                            color:"#b1e5d3",
-                            paddingTop:3
-                        }}>
-                            RUSSIA
-                        </Text> */}
         </TouchableOpacity>
 
         <View
@@ -210,7 +196,7 @@ const Home = ({ navigation }) => {
           style={{
             height: 250,
             elevation: 2,
-            backgroundColor: "#FFF",
+            backgroundColor: "#228b22",
             marginLeft: 20,
             marginTop: 20,
             borderRadius: 15,
@@ -218,83 +204,37 @@ const Home = ({ navigation }) => {
             width: 160,
           }}
         >
-          <Image source={require("../images/5.png")} />
+          <Image
+            source={require("../images/5.png")}
+            style={{
+              flex: 1,
+              width: null,
+              height: null,
+              resizeMode: "contain",
+            }}
+          />
           <View
             style={{
               flexDirection: "row",
-              paddingTop: 20,
+              //paddingTop: 20,
               paddingHorizontal: 10,
             }}
           >
             <Text
               style={{
                 fontWeight: "bold",
-                marginRight: 70,
+                fontSize: 25,
+                textAlign: "center",
+                flex: 1,
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               AUTO
             </Text>
-            <Icon
-              name="light-bulb"
-              type="entypo"
-              color="#517fa4"
-              style={{ alignItems: "flex-end" }}
-            />
-            {/* <Text style={{
-                                fontWeight:"bold",
-                                color:"#00a46c",
-                                paddingLeft:45
-                            }}>$400</Text> */}
           </View>
-          {/* <Text style={{
-                            paddingHorizontal:10,
-                            fontWeight:"bold",
-                            color:"#b1e5d3",
-                            paddingTop:3
-                        }}>
-                            RUSSIA
-                        </Text> */}
         </View>
-
-        {/* <View 
-                        // onPress={()=>navigation.navigate("Detail")}
-                        style={{
-                            height:250,
-                            elevation:2,
-                            backgroundColor:"#FFF",
-                            marginLeft:20,
-                            marginTop:20,
-                            borderRadius:15,
-                            marginBottom:10,
-                            width:160
-                        }}
-                    >
-                        <Image
-                            source={require('../images/6.png')}
-                        />
-                        <View style={{
-                            flexDirection:"row",
-                            paddingTop:10,
-                            paddingHorizontal:10
-                        }}>
-                            <Text style={{
-                                fontWeight:"bold"
-                            }}>SAMANTHA</Text>
-                            <Text style={{
-                                fontWeight:"bold",
-                                color:"#00a46c",
-                                paddingLeft:35
-                            }}>$400</Text>
-                        </View>
-                        <Text style={{
-                            paddingHorizontal:10,
-                            fontWeight:"bold",
-                            color:"#b1e5d3",
-                            paddingTop:3
-                        }}>
-                            RUSSIA
-                        </Text>
-                    </View> */}
       </ScrollView>
 
       <View
@@ -303,7 +243,7 @@ const Home = ({ navigation }) => {
           paddingHorizontal: 20,
           width: "100%",
           alignItems: "center",
-          marginBottom: 80,
+          marginBottom: 40,
         }}
       >
         <View style={{ width: "50%" }}>
@@ -316,14 +256,6 @@ const Home = ({ navigation }) => {
           >
             Farm Information
           </Text>
-          {/* <View
-            style={{
-              height: 4,
-              backgroundColor: "#b1e5d3",
-              width: 115,
-              marginTop: -5,
-            }}
-          ></View> */}
         </View>
         <View style={{ width: "50%", alignItems: "flex-end" }}>
           <View
@@ -346,23 +278,28 @@ const Home = ({ navigation }) => {
           </View>
         </View>
       </View>
-      {/* <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={{ marginBottom: -100 }}
-      >
-        <Image
-          source={require("../images/18.png")}
-          style={{ marginTop: 20, marginHorizontal: 20 }}
-        />
-        <Image
-          source={require("../images/19.png")}
-          style={{ marginTop: 20, borderRadius: 10 }}
-        />
-      </ScrollView> */}
 
-      <View>
-        <Text>Hello</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          //paddingTop: 20,
+          paddingHorizontal: 10,
+          paddingBottom: 25,
+        }}
+      >
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 40,
+            textAlign: "center",
+            flex: 1,
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          LUX: 720
+        </Text>
       </View>
     </View>
   );
