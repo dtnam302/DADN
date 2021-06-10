@@ -298,7 +298,7 @@ const Home = ({ navigation }) => {
             alignItems: "center",
           }}
         >
-          LUX: 720
+          LUX: 730
         </Text>
       </View>
     </View>
@@ -306,3 +306,4 @@ const Home = ({ navigation }) => {
 };
 export default Home;
 //test git
+//test git 2
