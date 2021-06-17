@@ -26,9 +26,9 @@ const Favourite = () => {
                 },
               ]}
             >
-              John Doe
+              Nam Doan
             </Title>
-            <Caption style={styles.caption}>@j_doe</Caption>
+            <Caption style={styles.caption}>@dtnam</Caption>
           </View>
         </View>
       </View>
@@ -37,19 +37,17 @@ const Favourite = () => {
         <View style={styles.row}>
           <Icon name="map-marker-radius" color="#777777" size={20} />
           <Text style={{ color: "#777777", marginLeft: 20 }}>
-            Kolkata, India
+            Binh Thuan, Vietnam
           </Text>
         </View>
         <View style={styles.row}>
           <Icon name="phone" color="#777777" size={20} />
-          <Text style={{ color: "#777777", marginLeft: 20 }}>
-            +91-900000009
-          </Text>
+          <Text style={{ color: "#777777", marginLeft: 20 }}>+84 773 2066</Text>
         </View>
         <View style={styles.row}>
           <Icon name="email" color="#777777" size={20} />
           <Text style={{ color: "#777777", marginLeft: 20 }}>
-            john_doe@email.com
+            dtnam302@gmail.com
           </Text>
         </View>
       </View>
@@ -64,8 +62,8 @@ const Favourite = () => {
             },
           ]}
         >
-          <Title>₹140.50</Title>
-          <Caption>Wallet</Caption>
+          <Title>5</Title>
+          <Caption>Farm Login</Caption>
         </View>
         <View style={styles.infoBox}>
           <Title>12</Title>
@@ -83,13 +81,13 @@ const Favourite = () => {
         <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
             <Icon name="credit-card" color="#FF6347" size={25} />
-            <Text style={styles.menuItemText}>Payment</Text>
+            <Text style={styles.menuItemText}>Profit</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
             <Icon name="share-outline" color="#FF6347" size={25} />
-            <Text style={styles.menuItemText}>Tell Your Friends</Text>
+            <Text style={styles.menuItemText}>Share strategy</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={() => {}}>

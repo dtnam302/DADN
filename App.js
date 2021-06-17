@@ -1,11 +1,12 @@
-import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
-import HomeStackNavigator from "./src/navigations/Navigator"
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import HomeStackNavigator from "./src/navigations/Navigator";
 const App = () => {
-  return(
+  console.disableYellowBox = true;
+  return (
     <NavigationContainer>
-      <HomeStackNavigator/>
+      <HomeStackNavigator />
     </NavigationContainer>
-  )
-}
+  );
+};
 export default App;
