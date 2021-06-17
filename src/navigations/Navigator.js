@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../screens/Home";
 import Detail from "../screens/Detail";
 import Favourite from "../screens/Favourite";
-import Profile from "../screens/Profile";
+import FarmChart from "../screens/FarmChart";
 import { Image } from "react-native";
 
 const Tab = createBottomTabNavigator();
@@ -36,8 +36,8 @@ const BottomTabNavigator = () => {
       />
 
       <Tab.Screen
-        name="Favourite"
-        component={Favourite}
+        name="FarmChart"
+        component={FarmChart}
         options={{
           tabBarLabel: "",
           tabBarIcon: ({ color, size }) => (
@@ -49,8 +49,8 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="Favourite"
+        component={Favourite}
         options={{
           tabBarLabel: "",
           tabBarIcon: ({ color, size }) => (

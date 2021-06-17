@@ -1,156 +1,181 @@
-import React from 'react'
-import {View, Text,Image } from 'react-native'
-import SwiperComponent from '../components/SwiperComponent'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import React, { Component } from "react";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { LineChart, Path } from "react-native-svg-charts";
+import * as shape from "d3-shape";
 
-const Detail = ({navigation}) => {
-    return(
-        <View style={{
-            flex:1,
-            backgroundColor:"#FFF",
-            
-        }}>
-            <View style={{
-                flexDirection:"row",
-                width:"100%",
-                height:"90%"
-            }}>
-                <View style={{width:"10%",paddingLeft:20}}>
-                    <TouchableOpacity onPress={()=>navigation.goBack()}>
-                        <Image
-                            source={require('../images/17.png')}
-                            style={{marginVertical:40}}
-                        />
-                    </TouchableOpacity>   
-                        <View style={{
-                            backgroundColor:"#FFF",
-                            height:50,
-                            width:50,
-                            borderRadius:5,
-                            elevation:5,
-                            alignItems:"center",
-                            justifyContent:"center",
-                            marginTop:50
-                        }}>
-                            <Image
-                                source={require('../images/11.png')}
-                            />
-                        </View>
-                        <View style={{
-                            backgroundColor:"#FFF",
-                            height:50,
-                            width:50,
-                            borderRadius:5,
-                            elevation:5,
-                            alignItems:"center",
-                            justifyContent:"center",
-                            marginTop:50
-                        }}>
-                            <Image
-                                source={require('../images/12.png')}
-                            />
-                        </View>
-                        <View style={{
-                            backgroundColor:"#FFF",
-                            height:50,
-                            width:50,
-                            borderRadius:5,
-                            elevation:5,
-                            alignItems:"center",
-                            justifyContent:"center",
-                            marginTop:50
-                        }}>
-                            <Image
-                                source={require('../images/13.png')}
-                            />
-                        </View>
-                        <View style={{
-                            backgroundColor:"#FFF",
-                            height:50,
-                            width:50,
-                            borderRadius:5,
-                            elevation:5,
-                            alignItems:"center",
-                            justifyContent:"center",
-                            marginTop:50
-                        }}>
-                            <Image
-                                source={require('../images/14.png')}
-                            />
-                        </View>  
-                </View>
-                <View style={{width:"90%"}}>
-                        <SwiperComponent/>
-                </View>
-            </View>
+import * as theme from "../theme";
+import { Block, Text } from "../components";
+import mocks from "../settings";
 
-                        <View style={{
-                            flexDirection:"row",
-                            marginTop:-80,
-                            marginHorizontal:20,
-                            alignItems:"center"
-                        }}>
-                            <Text style={{
-                                fontWeight:"bold",
-                                fontSize:28,
-                                color:"#62636a"
-                            }}>
-                                Angelica
-                            </Text>
-                            <Text style={{
-                                fontWeight:"bold",
-                                color:"#00a46c",
-                                paddingLeft:170,
-                                fontSize:20
-                            }}>
-                                $400
-                            </Text>
-                        </View>
+class Dashboard extends Component {
+  static navigationOptions = {
+    header: null,
+  };
+  render() {
+    const { navigation, settings } = this.props;
+    const LightIcon = settings["light"].icon;
+    const ACIcon = settings["ac"].icon;
+    const TempIcon = settings["temperature"].icon;
+    const FanIcon = settings["fan"].icon;
+    const WiFiIcon = settings["wi-fi"].icon;
+    const ElectricityIcon = settings["electricity"].icon;
 
-                        <Text style={{
-                            paddingHorizontal:20,
-                            fontWeight:"bold",
-                            color:"#b1e5d3",
-                            paddingTop:3,
-                            fontSize:20
-                        }}>
-                            Russia
-                        </Text>
+    return (
+      <Block style={styles.dashboard}>
+        <Block column style={{ marginVertical: theme.sizes.base * 2 }}>
+          <Text welcome>Hello</Text>
+          <Text name>John Doe</Text>
+        </Block>
 
-                        <View style={{
-                            flexDirection:"row",
-                            width:"100%"
-                        }}>
-                            <View style={{
-                                width:"50%",
-                                backgroundColor:"#00a46c",
-                                height:70,
-                                marginTop:20,
-                                borderTopRightRadius:25,
-                                alignItems:"center",
-                                justifyContent:"center"
-                            }}>
-                                <Text style={{
-                                    color:"#FFF",
-                                    fontSize:17
-                                }}>Buy Now</Text>
-                            </View>
+        <Block row style={{ paddingVertical: 10 }}>
+          <Block flex={1.5} row style={{ alignItems: "flex-end" }}>
+            <Text h1>34</Text>
+            <Text h1 size={34} height={80} weight="600" spacing={0.1}>
+              °C
+            </Text>
+          </Block>
+          <Block flex={1} column>
+            <Text caption>Humidity</Text>
+            <LineChart
+              yMax={100}
+              yMin={0}
+              data={[0, 20, 25, 15, 20, 55, 60]}
+              style={{ flex: 0.8 }}
+              curve={shape.curveNatural}
+              svg={{ stroke: theme.colors.accent, strokeWidth: 3 }}
+            />
+          </Block>
+        </Block>
 
-                            <View style={{
-                                width:"50%",
-                                alignItems:"center",
-                                justifyContent:"center",
-                                marginTop:20
-                            }}>
-                                <Text style={{
-                                    color:"#62636a",
-                                    fontWeight:"bold",
-                                    fontSize:17
-                                }}>Description</Text>
-                            </View>
-                        </View>
-                        
-        </View>
-    )
+        <ScrollView
+          contentContainerStyle={styles.buttons}
+          showsVerticalScrollIndicator={false}
+        >
+          <Block column space="between">
+            <Block
+              row
+              space="around"
+              style={{ marginVertical: theme.sizes.base }}
+            >
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() =>
+                  navigation.navigate("Settings", { name: "light" })
+                }
+              >
+                <Block center middle style={styles.button}>
+                  <LightIcon size={38} />
+                  <Text button style={{ marginTop: theme.sizes.base * 0.5 }}>
+                    {settings["light"].name}
+                  </Text>
+                </Block>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => navigation.navigate("Settings", { name: "ac" })}
+              >
+                <Block center middle style={styles.button}>
+                  <ACIcon size={38} />
+                  <Text button style={{ marginTop: theme.sizes.base * 0.5 }}>
+                    {settings["ac"].name}
+                  </Text>
+                </Block>
+              </TouchableOpacity>
+            </Block>
+
+            <Block
+              row
+              space="around"
+              style={{ marginVertical: theme.sizes.base }}
+            >
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() =>
+                  navigation.navigate("Settings", { name: "temperature" })
+                }
+              >
+                <Block center middle style={styles.button}>
+                  <TempIcon size={38} />
+                  <Text button style={{ marginTop: theme.sizes.base * 0.5 }}>
+                    {settings["temperature"].name}
+                  </Text>
+                </Block>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => navigation.navigate("Settings", { name: "fan" })}
+              >
+                <Block center middle style={styles.button}>
+                  <FanIcon size={38} />
+                  <Text button style={{ marginTop: theme.sizes.base * 0.5 }}>
+                    {settings["fan"].name}
+                  </Text>
+                </Block>
+              </TouchableOpacity>
+            </Block>
+
+            <Block
+              row
+              space="around"
+              style={{ marginVertical: theme.sizes.base }}
+            >
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() =>
+                  navigation.navigate("Settings", { name: "wi-fi" })
+                }
+              >
+                <Block center middle style={styles.button}>
+                  <WiFiIcon size={38} />
+                  <Text button style={{ marginTop: theme.sizes.base * 0.5 }}>
+                    {settings["wi-fi"].name}
+                  </Text>
+                </Block>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() =>
+                  navigation.navigate("Settings", { name: "electricity" })
+                }
+              >
+                <Block center middle style={styles.button}>
+                  <ElectricityIcon size={38} />
+                  <Text button style={{ marginTop: theme.sizes.base * 0.5 }}>
+                    {settings["electricity"].name}
+                  </Text>
+                </Block>
+              </TouchableOpacity>
+            </Block>
+          </Block>
+        </ScrollView>
+      </Block>
+    );
+  }
 }
-export default Detail;
+
+Dashboard.defaultProps = {
+  settings: mocks,
+};
+
+export default Dashboard;
+
+const styles = StyleSheet.create({
+  dashboard: {
+    flex: 1,
+    padding: theme.sizes.base * 2,
+    marginBottom: -theme.sizes.base * 6,
+  },
+  buttons: {
+    flex: 1,
+    marginBottom: -theme.sizes.base * 6,
+  },
+  button: {
+    backgroundColor: theme.colors.button,
+    width: 151,
+    height: 151,
+    borderRadius: 151 / 2,
+  },
+});
