@@ -6,11 +6,37 @@ import {
   TouchableOpacity,
 } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
-import { Button } from "react-native-elements/dist/buttons/Button";
+
+//mqtt part
+import {
+  USER,
+  DefaultConnectOptions,
+  ConnectSetting,
+  Topics,
+  Subscribe_Topics,
+} from "../global/user";
+import MQTT from "../mqtt/mqtt-object";
+
+import {
+  state,
+  updateObjects,
+  turnOffHandler,
+  turnOnHandler,
+  getInitChartData,
+  subscribeTopics,
+  sendLCD,
+} from "./../mqtt/build-in-function";
+
+//defaut value
 
 const Home = ({ navigation }) => {
-  var [clicked, setClicked] = useState(true);
-  var [isOn, setIson] = useState(true);
+  var [auto, setAuto] = useState(false);
+  var [isOn, setIson] = useState(state["led"]);
+  var [lux, setLux] = useState(state["lux"]);
+  var [warning, setWarning] = useState(false);
+
+  var luxEstimated = "750";
+  var timeEstimated = 5000; //20s
 
   return (
     <ScrollView>
@@ -129,7 +155,18 @@ const Home = ({ navigation }) => {
                   color: isOn ? "#FFF" : "#F30", //F30 => off
                 }}
                 onPress={() => {
-                  if (!clicked) setIson((isOn = !isOn)); //update by light status
+                  if (!auto) {
+                    if (isOn) {
+                      console.log("Turn off");
+                      turnOffHandler();
+                    } else {
+                      turnOnHandler();
+                    }
+                    setIson((isOn = !isOn));
+                    state["led"] = !state["led"];
+                  }
+                  //update by light status
+                  // turn on and off sent
                 }}
               >
                 Light: {isOn ? "On" : "OFF"}
@@ -154,15 +191,14 @@ const Home = ({ navigation }) => {
               top: 0,
             }}
           />
-          <TouchableOpacity
+          <TouchableOpacity //manual button
             onPress={() => {
-              // navigation.navigate("Detail");
-              setClicked((clicked = !clicked));
+              setAuto((auto = !auto));
             }}
             style={{
               height: 200,
               elevation: 2,
-              backgroundColor: clicked ? "#F30" : "#228b22", //red => manual off
+              backgroundColor: auto ? "#F30" : "#228b22", //red => auto off
               marginLeft: 20,
               marginTop: 20,
               borderRadius: 15,
@@ -204,15 +240,45 @@ const Home = ({ navigation }) => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          <TouchableOpacity //auto button
             onPress={() => {
-              // navigation.navigate("Detail");
-              setClicked((clicked = !clicked));
+              setAuto((auto = !auto));
+              //auto mode
+              var e = parseInt(luxEstimated);
+              var c = parseInt(lux);
+              console.log(isOn);
+              if (c < e) {
+                if (!isOn) {
+                  setIson((isOn = !isOn));
+                  state["led"] = !state["led"];
+                  turnOnHandler();
+
+                  setTimeout(function () {
+                    setIson((isOn = !isOn));
+                    state["led"] = !state["led"];
+                    turnOffHandler();
+                    console.log("auto mode ~~~~~~~");
+                  }, timeEstimated);
+                }
+              } else {
+                if (isOn) {
+                  setIson((isOn = !isOn));
+                  state["led"] = !state["led"];
+                  turnOffHandler();
+
+                  setTimeout(function () {
+                    setIson((isOn = !isOn));
+                    state["led"] = !state["led"];
+                    turnOnHandler();
+                    console.log("auto mode ~~~~~~~");
+                  }, timeEstimated);
+                }
+              }
             }}
             style={{
               height: 200,
               elevation: 2,
-              backgroundColor: !clicked ? "#F30" : "#228b22", //red => manual off
+              backgroundColor: !auto ? "#F30" : "#228b22", //red => auto off
               marginLeft: 20,
               marginTop: 20,
               borderRadius: 15,
@@ -298,6 +364,51 @@ const Home = ({ navigation }) => {
             </View>
           </View>
         </View>
+        <View
+          style={{
+            flexDirection: "row",
+            paddingHorizontal: 20,
+            width: "100%",
+            alignItems: "center",
+            marginBottom: 60,
+          }}
+        >
+          <View style={{ width: "50%" }}>
+            <Text
+              style={{
+                fontWeight: "bold",
+                fontSize: 17,
+                color: "#585a61",
+              }}
+            >
+              Send data to LCD LED
+            </Text>
+          </View>
+          <View style={{ width: "50%", alignItems: "flex-end" }}>
+            <View
+              style={{
+                backgroundColor: "#00a46c",
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+                borderRadius: 15,
+              }}
+            >
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 13,
+                  color: "#FFF",
+                }}
+                onPress={() => {
+                  let timesend = setInterval(sendLCD(state), 5000);
+                  clearInterval(timesend);
+                }}
+              >
+                Send >>
+              </Text>
+            </View>
+          </View>
+        </View>
 
         <View
           style={{
@@ -316,9 +427,10 @@ const Home = ({ navigation }) => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
+              color: state["lux"] > 100 ? "#228b22" : "#F30",
             }}
           >
-            LUX: 730
+            LUX: {state["lux"]}
           </Text>
         </View>
       </View>

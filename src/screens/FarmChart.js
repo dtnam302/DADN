@@ -162,7 +162,6 @@ const FarmChart = () => {
                   data: [20, 45, 28, 80, 99, 43],
                 },
               ],
-              //legend: ["Rainy Days"], // optional
             }}
             width={Dimensions.get("window").width} // from react-native
             height={220}
