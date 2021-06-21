@@ -30,14 +30,23 @@ import {
 //defaut value
 
 const Home = ({ navigation }) => {
-  var [auto, setAuto] = useState(false);
+  var [auto, setAuto] = useState(state["auto"]);
   var [isOn, setIson] = useState(state["led"]);
-  var [lux, setLux] = useState(state["lux"]);
-  var [warning, setWarning] = useState(false);
 
-  var luxEstimated = "750";
-  var timeEstimated = 5000; //20s
-
+  var e = parseInt(state["luxEstimated"]);
+  var c = parseInt(state["lux"]);
+  if (auto) {
+    if (c < e && !isOn) {
+      setIson((isOn = !isOn));
+      state["led"] = !state["led"];
+      turnOnHandler();
+    }
+    if (c > e && isOn) {
+      setIson((isOn = !isOn));
+      state["led"] = !state["led"];
+      turnOffHandler();
+    }
+  }
   return (
     <ScrollView>
       <View
@@ -194,6 +203,7 @@ const Home = ({ navigation }) => {
           <TouchableOpacity //manual button
             onPress={() => {
               setAuto((auto = !auto));
+              state["auto"] = !state["auto"];
             }}
             style={{
               height: 200,
@@ -243,22 +253,23 @@ const Home = ({ navigation }) => {
           <TouchableOpacity //auto button
             onPress={() => {
               setAuto((auto = !auto));
+              state["auto"] = !state["auto"];
               //auto mode
-              var e = parseInt(luxEstimated);
-              var c = parseInt(lux);
-              console.log(isOn);
+              var e = parseInt(state["luxEstimated"]);
+              var c = parseInt(state["lux"]);
+              console.log(c);
+              console.log("auto mode here");
               if (c < e) {
                 if (!isOn) {
                   setIson((isOn = !isOn));
                   state["led"] = !state["led"];
                   turnOnHandler();
 
-                  setTimeout(function () {
-                    setIson((isOn = !isOn));
-                    state["led"] = !state["led"];
-                    turnOffHandler();
-                    console.log("auto mode ~~~~~~~");
-                  }, timeEstimated);
+                  // setTimeout(function () {
+                  //   setIson((isOn = !isOn));
+                  //   state["led"] = !state["led"];
+                  //   turnOffHandler();
+                  // }, timeEstimated);
                 }
               } else {
                 if (isOn) {
@@ -266,12 +277,11 @@ const Home = ({ navigation }) => {
                   state["led"] = !state["led"];
                   turnOffHandler();
 
-                  setTimeout(function () {
-                    setIson((isOn = !isOn));
-                    state["led"] = !state["led"];
-                    turnOnHandler();
-                    console.log("auto mode ~~~~~~~");
-                  }, timeEstimated);
+                  // setTimeout(function () {
+                  //   setIson((isOn = !isOn));
+                  //   state["led"] = !state["led"];
+                  //   turnOnHandler();
+                  // }, timeEstimated);
                 }
               }
             }}

@@ -29,14 +29,21 @@ const screenWidth = Dimensions.get("window").width;
 
 getInitChartData(state);
 const FarmChart = () => {
-  var [count, setCount] = useState(true);
   var lb = state["data"]["labels"];
   var dt = state["data"]["datasets"][0]["data"];
   var elec = [];
-  var wattinsecond = (9 * 36) / 60;
-  const arrAvg = (arr) => dt.reduce((a, b) => a + b, 0) / dt.length;
+  var wattinsecond = 9;
+  var count = 1;
+  const sum = dt.reduce((a, b) => a + b, 0);
+  const avg = sum / dt.length || 0;
+
   dt.forEach((elem) => {
-    elec.push(elem * wattinsecond);
+    if (elem > 100) {
+      elec.push(0);
+    } else {
+      elec.push(count * wattinsecond);
+      count += 1;
+    }
   });
   return (
     <ScrollView>
@@ -137,7 +144,7 @@ const FarmChart = () => {
                   data: dt,
                 },
               ],
-              legend: arrAvg > 100 ? ["Sunny Day"] : ["Rainy Day"], // optional
+              legend: avg > 100 ? ["Sunny Day"] : ["Rainy Day"], // optional
             }}
             width={Dimensions.get("window").width} // from react-native
             height={220}

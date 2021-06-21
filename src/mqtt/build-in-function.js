@@ -11,7 +11,14 @@ import HomeStackNavigator from "../navigations/Navigator";
 export var state = {
   led: false, //trang thai den
   lux: "0", //so lieu den
-  warning: false, //trang thai thong bao
+  auto: false, //trang thai thong bao
+  luxEstimated: "110",
+  timeEstimated: 10000,
+  luxavg: 0,
+  solidavg: 0,
+  humavg: 0,
+  temavg: 0,
+  elec: 0,
   data: {
     //data of chart
     labels: [
@@ -112,24 +119,27 @@ const data_limit = distance * chart_col;
 // }
 
 export function getInitChartData(state) {
-  var response = require("../global/test.json");
+  //var response = require("../global/test.json");
+  fetch(`https://dadnhk212.herokuapp.com/get/lux`)
+    .then((response) => response.json())
+    .then(function (response) {
+      //---------------------------
+      var lb = [];
+      var dt = [];
 
-  //---------------------------
-  var lb = [];
-  var dt = [];
+      var count = 0;
 
-  var count = 0;
+      response.forEach((elem) => {
+        let d = new Date(elem["created_at"]);
+        lb.push(d.toTimeString().slice(0, 8));
+        dt.push(parseInt(JSON.parse(elem["value"])["data"]));
+      });
+      const items = lb.slice(-5);
+      const items1 = dt.slice(-5);
 
-  response.forEach((elem) => {
-    let d = new Date(elem["created_at"]);
-    lb.push(d.toTimeString().slice(0, 8));
-    dt.push(parseInt(JSON.parse(elem["value"])["data"]));
-  });
-  const items = lb.slice(-5);
-  const items1 = dt.slice(-5);
-
-  state["data"]["labels"] = items;
-  state["data"]["datasets"][0]["data"] = items1;
+      state["data"]["labels"] = items;
+      state["data"]["datasets"][0]["data"] = items1;
+    });
 }
 
 export function subscribeTopics() {
@@ -140,14 +150,14 @@ export function subscribeTopics() {
 }
 
 export function turnOnHandler() {
-  Topics.forEach(({ name, jsonobj, on }) => {
-    mqtt.send(name, JSON.stringify(jsonobj(on)));
+  Topics.forEach(({ name, jsonobj, on, thing }) => {
+    if (thing != "lcd") mqtt.send(name, JSON.stringify(jsonobj(on)));
   });
 }
 
 export function turnOffHandler() {
-  Topics.forEach(({ name, jsonobj, off }) => {
-    mqtt.send(name, JSON.stringify(jsonobj(off)));
+  Topics.forEach(({ name, jsonobj, off, thing }) => {
+    if (thing != "lcd") mqtt.send(name, JSON.stringify(jsonobj(off)));
   });
 }
 
@@ -162,4 +172,59 @@ export function sendLCD(state) {
       mqtt.send(name, JSON.stringify(jsonobj(lcd)));
     }
   });
+}
+
+export function getAVGluxData(state) {
+  //var response = require("../global/test.json");
+  fetch("https://dadnhk212.herokuapp.com/get/lux")
+    .then((response) => response.json())
+    .then(function (response) {
+      //---------------------------
+
+      var count = 0;
+      var len = response.length;
+      var avgelec = 0;
+      response.forEach((elem) => {
+        count += parseInt(JSON.parse(elem["value"])["data"]);
+        if (parseInt(JSON.parse(elem["value"])["data"]) > 100) {
+          avgelec += 9 * (parseFloat(JSON.parse(elem["value"])["data"]) - 100);
+        }
+      });
+      state["luxavg"] = count / len;
+      state["elec"] = avgelec;
+    });
+}
+export function getAVGsolidData(state) {
+  //var response = require("../global/test.json");
+  fetch("https://dadnhk212.herokuapp.com/get/soil")
+    .then((response) => response.json())
+    .then(function (response) {
+      //---------------------------
+
+      var count = 0;
+      var len = response.length;
+      response.forEach((elem) => {
+        count += parseInt(JSON.parse(elem["value"])["data"]);
+      });
+      state["solidavg"] = count / len;
+    });
+}
+export function getAVGhumtemData(state) {
+  //var response = require("../global/test.json");
+  fetch("https://dadnhk212.herokuapp.com/get/humidity")
+    .then((response) => response.json())
+    .then(function (response) {
+      //---------------------------
+
+      var tem = 0;
+      var hum = 0;
+      var len = response.length;
+      response.forEach((elem) => {
+        var string = JSON.parse(elem["value"])["data"];
+        tem += parseInt(string.split("-")[0]);
+        hum += parseInt(string.split("-")[1]);
+      });
+      state["humavg"] = hum / len;
+      state["temavg"] = tem / len;
+    });
 }

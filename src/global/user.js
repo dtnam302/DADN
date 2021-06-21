@@ -2,7 +2,7 @@ export const USER = {
   host: "io.adafruit.com",
   port: 80,
   userName: "dtnam302",
-  password: "aio_YwqP4337uuNYM4xRhTFZH2SqZgwW",
+  password: "aio_FQCn07aqfMGplL8xxdlRQIhpo8tZ",
 };
 export const DefaultConnectOptions = {
   reconnect: false,
@@ -33,20 +33,7 @@ export const Topics = [
     on: "1",
     off: "0",
   },
-  // {
-  //   name: `${USER.userName}/feeds/kkllm-iot-speaker`,
-  //   thing: "valve",
-  //   jsonobj: (payload) => {
-  //     return {
-  //       id: "3",
-  //       name: "SPEAKER",
-  //       data: payload,
-  //       unit: "",
-  //     };
-  //   },
-  //   on: "888",
-  //   off: "0",
-  // },
+
   {
     name: `${USER.userName}/feeds/lcd`,
     thing: "lcd",
@@ -61,20 +48,6 @@ export const Topics = [
     on: "System WARNING!",
     off: "System normal",
   },
-  // {
-  //   name: `${USER.userName}/feeds/kkllm-iot-led`,
-  //   thing: "valve",
-  //   jsonobj: (payload) => {
-  //     return {
-  //       id: "1",
-  //       name: "LED",
-  //       data: payload,
-  //       unit: "",
-  //     };
-  //   },
-  //   on: "1",
-  //   off: "0",
-  // },
 ];
 
 export const Subscribe_Topics = [

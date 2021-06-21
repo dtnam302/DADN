@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import HomeStackNavigator from "./src/navigations/Navigator";
 
 const App = () => {
-  console.disableYellowBox = true;
+  //console.disableYellowBox = true;
 
   return (
     <NavigationContainer>

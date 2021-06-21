@@ -4,16 +4,41 @@ import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { FlatGrid } from "react-native-super-grid";
+import {
+  state,
+  updateObjects,
+  turnOffHandler,
+  turnOnHandler,
+  getInitChartData,
+  subscribeTopics,
+  sendLCD,
+  getAVGluxData,
+  getAVGhumtemData,
+  getAVGsolidData,
+} from "./../mqtt/build-in-function";
 
 export default function Detail() {
+  getAVGluxData(state);
+  getAVGhumtemData(state);
+  getAVGsolidData(state);
+  var lux = state["luxavg"];
+  var solid = state["solidavg"];
+  var hum = state["humavg"];
+  var tem = state["temavg"];
+  var elec = state["elec"];
+  //var elec = Math.round(state["elec"] * 100) / 100;
+  lux = Math.round(lux * 100) / 100;
+  solid = Math.round(solid * 100) / 100;
+  hum = Math.round(hum * 100) / 100;
+  tem = Math.round(tem * 100) / 100;
+  elec = Math.round(elec * 100) / 100;
+
   const [items, setItems] = React.useState([
-    { name: "DO AM", code: "#1abc9c" },
-    { name: "NHIET DO", code: "#2ecc71" },
-    { name: "SUC GIO", code: "#3498db" },
-    { name: "NANG LUONG SU DUNG", code: "#9b59b6" },
-    { name: "TEST", code: "#34495e" },
-    { name: "GREEN SEA", code: "#16a085" },
-    { name: "NEPHRITIS", code: "#27ae60" },
+    { name: "ANH SANG", code: "#1abc9c", value: lux, unit: "LUX" },
+    { name: "DO AM DAT", code: "#2ecc71", value: solid, unit: "%" },
+    { name: "DO AM KHONG KHI", code: "#3498db", value: hum, unit: "%" },
+    { name: "NANG LUONG SU DUNG", code: "#9b59b6", value: elec, unit: "W" },
+    { name: "NHIET DO", code: "#34495e", value: tem, unit: "*C" },
   ]);
 
   return (
@@ -109,8 +134,8 @@ export default function Detail() {
         renderItem={({ item }) => (
           <View style={[styles.itemContainer, { backgroundColor: item.code }]}>
             <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemCode}>{item.code}</Text>
-            <Text>More infor</Text>
+            <Text style={styles.itemCode}>{item.value}</Text>
+            <Text style={styles.itemName}>{item.unit}</Text>
           </View>
         )}
       />
