@@ -38,14 +38,13 @@ mqtt.ConnectSuccessAction = () => {
 };
 
 mqtt.SetResponseFunction = (message) => {
-  console.log("Changing state of ", message.destinationName);
-  console.log("see value:  ", JSON.parse(message.payloadString).data);
+  //console.log("Changing state of ", message.destinationName);
+  //console.log("see value:  ", JSON.parse(message.payloadString).data);
   let val = JSON.parse(message.payloadString).data;
   updateObjects(message.destinationName, val, state);
   //DevSettings.reload();
 };
 mqtt.connect(USER.host, USER.port, USER.userName, USER.password);
-//getInitChartData();
 
 // main object update
 export function updateObjects(destinationName, data, state) {
@@ -71,52 +70,66 @@ export function updateObjects(destinationName, data, state) {
 }
 
 //data for fetch api from server
-const iokey = "aio_CraM232LDztkYUG2RxHySDg7ZUTr";
-const user_name = "CSE_BBC";
-const feed = "bk-iot-temp-humid";
+const iokey = "aio_YwqP4337uuNYM4xRhTFZH2SqZgwW";
+const user_name = "dtnam302";
+const feed = "testchart";
 const distance = 5;
 const chart_col = 12;
 const data_limit = distance * chart_col;
+// export function getInitChartData(state) {
+//   fetch("../global/test.json")
+//     .then((response) => response.json())
+//     .then(function (response) {
+//       console.log("response:");
+//       console.log(typeof response);
+
+//       //---------------------------
+//       var lb = [];
+//       var dt = [];
+
+//       var count = 0;
+
+//       response.forEach((elem) => {
+//         console.log("Here");
+//         count += 1;
+//         if (count % distance == 1) {
+//           let d = new Date(elem["created_at"]);
+//           lb.push(d.toTimeString());
+//           dt.push(parseInt(JSON.parse(elem["value"])["data"]));
+//         }
+//       });
+
+//       console.log(lb);
+//       console.log(dt);
+
+//       state["data"]["labels"] = lb;
+//       state["data"]["datasets"][0]["data"] = dt;
+//     })
+//     .catch(function (err) {
+//       console.log("Error!");
+//       console.log(err);
+//     });
+// }
+
 export function getInitChartData(state) {
-  fetch(
-    `https://io.adafruit.com/api/v2/${user_name}/feeds/${feed}/data?limit=${data_limit}`,
-    {
-      method: "GET",
-      headers: {
-        "X-AIO-Key": iokey,
-      },
-    }
-  )
-    .then((response) => response.json())
-    .then(function (response) {
-      console.log("response:");
-      console.log(response);
+  var response = require("../global/test.json");
 
-      //---------------------------
-      var lb = [];
-      var dt = [];
+  //---------------------------
+  var lb = [];
+  var dt = [];
 
-      var count = 0;
+  var count = 0;
 
-      response.forEach((elem) => {
-        count += 1;
-        if (count % distance == 1) {
-          let d = new Date(elem["created_at"]);
-          lb.push(d.toTimeString());
-          dt.push(parseInt(JSON.parse(elem["value"])["data"]));
-        }
-      });
+  response.forEach((elem) => {
+    let d = new Date(elem["created_at"]);
+    lb.push(d.toTimeString().slice(0, 8));
+    dt.push(parseInt(JSON.parse(elem["value"])["data"]));
+  });
+  const items = lb.slice(-5);
+  const items1 = dt.slice(-5);
 
-      console.log(lb);
-      console.log(dt);
-
-      state["data"]["labels"] = lb;
-      state["data"]["datasets"][0]["data"] = dt;
-    })
-    .catch(function (err) {
-      console.log("Error!");
-      console.log(err);
-    });
+  state["data"]["labels"] = items;
+  state["data"]["datasets"][0]["data"] = items1;
 }
 
 export function subscribeTopics() {

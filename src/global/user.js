@@ -2,7 +2,7 @@ export const USER = {
   host: "io.adafruit.com",
   port: 80,
   userName: "dtnam302",
-  password: "aio_uZmF172NQC5ckiTsMZNV8uM4vDFH",
+  password: "aio_YwqP4337uuNYM4xRhTFZH2SqZgwW",
 };
 export const DefaultConnectOptions = {
   reconnect: false,

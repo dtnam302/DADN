@@ -15,11 +15,29 @@ import {
   ContributionGraph,
   StackedBarChart,
 } from "react-native-chart-kit";
+import {
+  state,
+  updateObjects,
+  turnOffHandler,
+  turnOnHandler,
+  getInitChartData,
+  subscribeTopics,
+  sendLCD,
+} from "./../mqtt/build-in-function";
 import { Dimensions } from "react-native";
 const screenWidth = Dimensions.get("window").width;
+
+getInitChartData(state);
 const FarmChart = () => {
   var [count, setCount] = useState(true);
-
+  var lb = state["data"]["labels"];
+  var dt = state["data"]["datasets"][0]["data"];
+  var elec = [];
+  var wattinsecond = (9 * 36) / 60;
+  const arrAvg = (arr) => dt.reduce((a, b) => a + b, 0) / dt.length;
+  dt.forEach((elem) => {
+    elec.push(elem * wattinsecond);
+  });
   return (
     <ScrollView>
       <View
@@ -113,18 +131,18 @@ const FarmChart = () => {
           <Text>ANH SANG TRUNG BINH</Text>
           <LineChart
             data={{
-              labels: ["January", "February", "March", "April", "May", "June"],
+              labels: lb,
               datasets: [
                 {
-                  data: [20, 45, 28, 80, 99, 43],
+                  data: dt,
                 },
               ],
-              legend: ["Sunny Days"], // optional
+              legend: arrAvg > 100 ? ["Sunny Day"] : ["Rainy Day"], // optional
             }}
             width={Dimensions.get("window").width} // from react-native
             height={220}
             //yAxisLabel="$"
-            yAxisSuffix="lux"
+            yAxisSuffix=" L"
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
               backgroundColor: "#e26a00",
@@ -156,17 +174,17 @@ const FarmChart = () => {
           <Text>DIEN NANG TIEU THU</Text>
           <LineChart
             data={{
-              labels: ["January", "February", "March", "April", "May", "June"],
+              labels: lb,
               datasets: [
                 {
-                  data: [20, 45, 28, 80, 99, 43],
+                  data: elec,
                 },
               ],
             }}
             width={Dimensions.get("window").width} // from react-native
             height={220}
             //yAxisLabel="W"
-            yAxisSuffix="kWh"
+            yAxisSuffix="W"
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
               backgroundColor: "#0000cd",
