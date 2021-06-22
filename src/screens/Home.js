@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { View, Text, Image, ImageBackground, StyleSheet } from "react-native";
 import {
   TextInput,
@@ -32,6 +32,9 @@ import {
 const Home = ({ navigation }) => {
   var [auto, setAuto] = useState(state["auto"]);
   var [isOn, setIson] = useState(state["led"]);
+  var [LCD, setLCD] = useState(false);
+
+  var timer;
 
   var e = parseInt(state["luxEstimated"]);
   var c = parseInt(state["lux"]);
@@ -47,6 +50,23 @@ const Home = ({ navigation }) => {
       turnOffHandler();
     }
   }
+
+  useEffect(
+    function () {
+      if (!LCD) {
+        return;
+      }
+
+      const intervalId = setInterval(() => {
+        sendLCD(state);
+      }, 5000);
+      return () => {
+        console.log("Reached cleanup function");
+        clearInterval(intervalId);
+      };
+    },
+    [LCD]
+  );
   return (
     <ScrollView>
       <View
@@ -410,11 +430,12 @@ const Home = ({ navigation }) => {
                   color: "#FFF",
                 }}
                 onPress={() => {
-                  let timesend = setInterval(sendLCD(state), 5000);
-                  clearInterval(timesend);
+                  setLCD((LCD = !LCD));
+
+                  //sendLCD(state);
                 }}
               >
-                Send >>
+                {LCD ? "Unsend >> " : "Send >>"}
               </Text>
             </View>
           </View>
