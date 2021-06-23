@@ -2,7 +2,7 @@ export const USER = {
   host: "io.adafruit.com",
   port: 80,
   userName: "dtnam302",
-  password: "aio_anxg707nNwqoJSTPJoYzFb8MWoaA",
+  password: "aio_yufu97yR4tkMKtNY1UGiTxXvZNhO",
 };
 export const DefaultConnectOptions = {
   reconnect: false,
@@ -52,12 +52,11 @@ export const Topics = [
 
 export const Subscribe_Topics = [
   {
-    //johnwick123456
     name: `${USER.userName}/feeds/relay`,
     thing: "relay",
   },
   {
-    name: `${USER.userName}/feeds/lux`,
+    name: `${USER.userName}/feeds/luxapi`,
     thing: "lux",
   },
   {

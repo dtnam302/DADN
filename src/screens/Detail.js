@@ -26,7 +26,9 @@ export default function Detail() {
   var hum = state["humavg"];
   var tem = state["temavg"];
   var elec = state["elec"];
-  //var elec = Math.round(state["elec"] * 100) / 100;
+  var luxE = state["luxEstimated"];
+  var time = state["timeEstimated"];
+
   lux = Math.round(lux * 100) / 100;
   solid = Math.round(solid * 100) / 100;
   hum = Math.round(hum * 100) / 100;
@@ -39,6 +41,8 @@ export default function Detail() {
     { name: "DO AM KHONG KHI", code: "#3498db", value: hum, unit: "%" },
     { name: "NANG LUONG SU DUNG", code: "#9b59b6", value: elec, unit: "W" },
     { name: "NHIET DO", code: "#34495e", value: tem, unit: "*C" },
+    { name: "ANH SANG DU DOAN", code: "#1abc9c", value: luxE, unit: "LUX" },
+    { name: "THOI GIAN CHIEU SANG", code: "#9b59b6", value: time, unit: "MS" },
   ]);
 
   return (

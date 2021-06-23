@@ -12,8 +12,8 @@ export var state = {
   led: false, //trang thai den
   lux: "0", //so lieu den
   auto: false, //trang thai thong bao
-  luxEstimated: "110",
-  timeEstimated: 10000,
+  luxEstimated: "110", //anh sang tot nhat
+  timeEstimated: 10000, //thoi gian u sang
   luxavg: 0,
   solidavg: 0,
   humavg: 0,
@@ -21,19 +21,10 @@ export var state = {
   elec: 0,
   data: {
     //data of chart
-    labels: [
-      "1:00",
-      "4:00",
-      "7:00",
-      "10:00",
-      "13:00",
-      "16:00",
-      "19:00",
-      "22:00",
-    ],
+    labels: [],
     datasets: [
       {
-        data: [29.0, 24.3, 26.0, 28.1, 32.0, 33.4, 35.0, 10],
+        data: [],
       },
     ],
   },
@@ -45,11 +36,8 @@ mqtt.ConnectSuccessAction = () => {
 };
 
 mqtt.SetResponseFunction = (message) => {
-  //console.log("Changing state of ", message.destinationName);
-  //console.log("see value:  ", JSON.parse(message.payloadString).data);
   let val = JSON.parse(message.payloadString).data;
   updateObjects(message.destinationName, val, state);
-  //DevSettings.reload();
 };
 mqtt.connect(USER.host, USER.port, USER.userName, USER.password);
 
@@ -59,13 +47,9 @@ export function updateObjects(destinationName, data, state) {
     if (name == destinationName) {
       if (thing == "relay") {
         if (data == "1") {
-          //this.setState({valve: 'ON', fan: 'ON', pump: 'ON', warning: true});
           state["led"] = false;
-          state["warning"] = true;
         } else {
-          //this.setState({valve: 'OFF', fan: 'OFF', pump: 'OFF', warning: false});
           state["led"] = true;
-          state["warning"] = false;
         }
       }
       if (thing == "lux") {
@@ -77,12 +61,7 @@ export function updateObjects(destinationName, data, state) {
 }
 
 //data for fetch api from server
-const iokey = "aio_YwqP4337uuNYM4xRhTFZH2SqZgwW";
-const user_name = "dtnam302";
-const feed = "testchart";
-const distance = 5;
-const chart_col = 12;
-const data_limit = distance * chart_col;
+
 // export function getInitChartData(state) {
 //   fetch("../global/test.json")
 //     .then((response) => response.json())
@@ -120,7 +99,9 @@ const data_limit = distance * chart_col;
 
 export function getInitChartData(state) {
   //var response = require("../global/test.json");
-  fetch(`https://dadnhk212.herokuapp.com/get/lux`)
+  fetch(
+    `https://io.adafruit.com/api/v2/${USER.userName}/feeds/luxapi/data.json?X-AIO-Key=${USER.password}`
+  )
     .then((response) => response.json())
     .then(function (response) {
       //---------------------------
@@ -134,8 +115,8 @@ export function getInitChartData(state) {
         lb.push(d.toTimeString().slice(0, 8));
         dt.push(parseInt(JSON.parse(elem["value"])["data"]));
       });
-      const items = lb.slice(-5);
-      const items1 = dt.slice(-5);
+      const items = lb.slice(0, 6);
+      const items1 = dt.slice(0, 6);
 
       state["data"]["labels"] = items;
       state["data"]["datasets"][0]["data"] = items1;
@@ -163,6 +144,7 @@ export function turnOffHandler() {
 
 export function sendLCD(state) {
   Topics.forEach(({ name, thing, jsonobj }) => {
+    var lcd = "";
     if (parseInt(state["lux"]) < 100) {
       lcd = `LOW LUX: ${state["lux"]}`;
     } else {
@@ -176,7 +158,9 @@ export function sendLCD(state) {
 
 export function getAVGluxData(state) {
   //var response = require("../global/test.json");
-  fetch("https://dadnhk212.herokuapp.com/get/lux")
+  fetch(
+    `https://io.adafruit.com/api/v2/${USER.userName}/feeds/luxapi/data.json?X-AIO-Key=${USER.password}`
+  )
     .then((response) => response.json())
     .then(function (response) {
       //---------------------------
@@ -196,7 +180,9 @@ export function getAVGluxData(state) {
 }
 export function getAVGsolidData(state) {
   //var response = require("../global/test.json");
-  fetch("https://dadnhk212.herokuapp.com/get/soil")
+  fetch(
+    `https://io.adafruit.com/api/v2/${USER.userName}/feeds/soilapi/data.json?X-AIO-Key=${USER.password}`
+  )
     .then((response) => response.json())
     .then(function (response) {
       //---------------------------
@@ -211,7 +197,9 @@ export function getAVGsolidData(state) {
 }
 export function getAVGhumtemData(state) {
   //var response = require("../global/test.json");
-  fetch("https://dadnhk212.herokuapp.com/get/humidity")
+  fetch(
+    `https://io.adafruit.com/api/v2/${USER.userName}/feeds/humidity-tempapi/data.json?X-AIO-Key=${USER.password}`
+  )
     .then((response) => response.json())
     .then(function (response) {
       //---------------------------

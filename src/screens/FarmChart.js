@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, ImageBackground, StyleSheet } from "react-native";
 import {
   TextInput,
@@ -28,7 +28,18 @@ import { Dimensions } from "react-native";
 const screenWidth = Dimensions.get("window").width;
 
 getInitChartData(state);
+setInterval(() => {
+  getInitChartData(state);
+}, 3000);
+
 const FarmChart = () => {
+  var [teststate, setTeststate] = useState(0);
+  useEffect(function () {
+    setInterval(() => {
+      setTeststate(teststate + 1);
+    }, 3000);
+  }, []);
+
   var lb = state["data"]["labels"];
   var dt = state["data"]["datasets"][0]["data"];
   var elec = [];
@@ -45,6 +56,7 @@ const FarmChart = () => {
       count += 1;
     }
   });
+
   return (
     <ScrollView>
       <View

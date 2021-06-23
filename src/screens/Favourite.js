@@ -15,7 +15,7 @@ const Favourite = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
-          <Avatar.Image source={require("../images/4.png")} size={80} />
+          <Avatar.Image source={require("../images/user.png")} size={80} />
           <View style={{ marginLeft: 20 }}>
             <Title
               style={[

@@ -33,23 +33,7 @@ const Home = ({ navigation }) => {
   var [auto, setAuto] = useState(state["auto"]);
   var [isOn, setIson] = useState(state["led"]);
   var [LCD, setLCD] = useState(false);
-
-  var timer;
-
-  var e = parseInt(state["luxEstimated"]);
-  var c = parseInt(state["lux"]);
-  if (auto) {
-    if (c < e && !isOn) {
-      setIson((isOn = !isOn));
-      state["led"] = !state["led"];
-      turnOnHandler();
-    }
-    if (c > e && isOn) {
-      setIson((isOn = !isOn));
-      state["led"] = !state["led"];
-      turnOffHandler();
-    }
-  }
+  var [lux, setLux] = useState(state["lux"]);
 
   useEffect(
     function () {
@@ -59,7 +43,7 @@ const Home = ({ navigation }) => {
 
       const intervalId = setInterval(() => {
         sendLCD(state);
-      }, 5000);
+      }, 3000);
       return () => {
         console.log("Reached cleanup function");
         clearInterval(intervalId);
@@ -67,6 +51,12 @@ const Home = ({ navigation }) => {
     },
     [LCD]
   );
+
+  useEffect(function () {
+    setInterval(() => {
+      setLux((lux = state["lux"]));
+    }, 3000);
+  }, []);
   return (
     <ScrollView>
       <View
@@ -186,7 +176,6 @@ const Home = ({ navigation }) => {
                 onPress={() => {
                   if (!auto) {
                     if (isOn) {
-                      console.log("Turn off");
                       turnOffHandler();
                     } else {
                       turnOnHandler();
@@ -277,19 +266,16 @@ const Home = ({ navigation }) => {
               //auto mode
               var e = parseInt(state["luxEstimated"]);
               var c = parseInt(state["lux"]);
-              console.log(c);
-              console.log("auto mode here");
               if (c < e) {
                 if (!isOn) {
                   setIson((isOn = !isOn));
                   state["led"] = !state["led"];
                   turnOnHandler();
-
-                  // setTimeout(function () {
-                  //   setIson((isOn = !isOn));
-                  //   state["led"] = !state["led"];
-                  //   turnOffHandler();
-                  // }, timeEstimated);
+                  setTimeout(() => {
+                    setIson((isOn = !isOn));
+                    state["led"] = !state["led"];
+                    turnOffHandler();
+                  }, state["timeEstimated"]);
                 }
               } else {
                 if (isOn) {
@@ -458,10 +444,10 @@ const Home = ({ navigation }) => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              color: state["lux"] > 100 ? "#228b22" : "#F30",
+              color: lux > 100 ? "#228b22" : "#F30",
             }}
           >
-            LUX: {state["lux"]}
+            LUX: {lux}
           </Text>
         </View>
       </View>
